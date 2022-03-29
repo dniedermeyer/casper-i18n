@@ -1,0 +1,32 @@
+name: locales-format
+
+on:
+  push:
+    branches:
+      - jq-action
+
+jobs:
+  locales-format:
+    runs-on: ubuntu-latest
+    steps:
+    - name: install jq
+      run: sudo apt install -y jq
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup bot
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions"
+    - name: Checkout jq-action
+      run: git checkout jq-action
+    - name: Fix jsons
+      run: find locales -type f -name '*.json' | xargs -P $(nproc) -I {} sh -c 'echo "$(jq . "$1")" > "$1"' -- {}
+    - name: Commit changes
+      run: git add locales && git commit -m 'fix locales format'
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        tags: true
