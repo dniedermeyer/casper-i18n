@@ -10,6 +10,7 @@ For more detailed information about theme, see the [casper page](https://github.
 # Available languages
 - Chinese (zh)
 - Croatian (hr)
+- Dutch (nl)
 - English (en)
 - Finnish (fi)
 - French (fr)
